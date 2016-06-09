@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Back To The Future</title>
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<header>
+	<h1>Back To The Future</h1>
+	<!-- HINT: make this visible once the user is logged in -->
+	<nav><a href="/">logout</a></nav>
+
+	<!-- HINT: the `showError(..)` and `showMessage(..)` functions
+	     in app.js will put your messages here.
+	-->
+	<div id="message"></div>
+</header>
+
+<div id="loginBox">
+	<input id="loginUsername" type="text" placeholder="username" ><!-- value = "johnabark"> -->
+	<input id="loginPassword" type="password" placeholder="password" ><!-- value = "fooManchoo13">
+ -->
+	<button id="loginBtn">login</button>
+</div>
+
+<div id="dashboard">
+	<div id="controls">
+		<!-- HINT: here's where you'll add your filters, counters,
+		     add-reminder button, etc
+		-->
+		<h2>Controls</h2>
+		<p>...</p>
+	</div>
+	<div id="reminderList">
+		<!-- HINT: this `#reminder` element is a placeholder only
+			 here to act as a DOM template (`$reminderTemplate` in
+			 `app.js`) for making more reminders. It gets automatically
+			 `remove()`d from the DOM once the template is captured.
+		-->
+		<div class="reminder" data-reminder-id="0">
+			<div class="description">Lunch Break</div>
+			<div class="when">
+				<span class="datetime">12/28/2015 11:45am</span>
+				<span class="duration">for <span class="count">15</span> min</span>
+			</div>
+			<div class="createdBy">owner: <span class="user">someone</span></div>
+			<div class="invitees">with: <span class="users">other, people</span></div>
+			<div class="buttons">
+				<button class="ignore" title="ignore">Ø</button>
+				<button class="edit" title="edit">✎</button>
+				<button class="delete" title="delete">X</button>
+			</div>
+		</div>
+		<!-- END TEMPLATE -->
+	</div>
+</div>
+
+<div id="addReminderModal">
+	<h2>Add Reminder</h2>
+	<input class="description" type="text" placeholder="description" maxlength="100">
+	<input class="date" type="text" placeholder="date (yyyy-mm-dd)" maxlength="10">
+	<input class="time" type="text" placeholder="time (hh:mm:ss)" maxlength="8">
+	<input class="duration" type="text" placeholder="how many minutes?" maxlength="3">
+	<textarea class="invitees" placeholder="who to invite?" rows="3"></textarea>
+
+	<div class="buttons">
+		<button class="confirm">add</button>
+		<button class="cancel">cancel</button>
+	</div>
+</div>
+
+<div id="editReminderModal">
+	<h2>Edit Reminder</h2>
+	<input class="description" type="text" placeholder="description" maxlength="100">
+	<input class="date" type="text" placeholder="date (yyyy-mm-dd)" maxlength="10">
+	<input class="time" type="text" placeholder="time (hh:mm:ss)" maxlength="8">
+	<input class="duration" type="text" placeholder="how many minutes?" maxlength="3">
+	<textarea class="invitees" placeholder="who to invite?" rows="3"></textarea>
+
+	<div class="buttons">
+		<button class="confirm">save</button>
+		<button class="cancel">cancel</button>
+	</div>
+</div>
+
+
+<!-- HINT: don't forget to add your new modules' script
+     files here, and make sure to put them in the
+     correct order.
+-->
+<script src="/js/jquery.js"></script>
+<script src="/js/server-api.js"></script>
+<script src="/js/dashboard.js"></script>
+<script src="/js/app.js"></script>
+
+</body>
+</html>
