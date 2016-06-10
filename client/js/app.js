@@ -9,13 +9,86 @@
 function parseUri(e){var a=parseUri.options,f=a.parser[a.strictMode?"strict":"loose"].exec(e),b={},c=14;while(c--)b[a.key[c]]=f[c]||"";b[a.q.name]={};b[a.key[12]].replace(a.q.parser,function(h,d,g){if(d)b[a.q.name][d]=g});return b}parseUri.options={strictMode:false,key:["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],q:{name:"queryKey",parser:/(?:^|&)([^&=]*)=?([^&]*)/g},parser:{strict:/^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,loose:/^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/}};
 
 // ****************************************
+AppModule = (function(){
+  var $message;
+
+      // HINT: this `init()` function should probably be put into
+      // an `App` module.
 
 
-// HINT: this variable declaration shouldn't be global, it
-// should probably be in an `App` module. It's set in `init()` to
-// point to the `#message` <div> in index.html.
+    App.init = function() {
+      $message = $("#message");
+      $username = $("#loginUsername") //grabbing the username input811
+      $userpass = $("#loginPassword") //grabbing the password input
 
-var $message;
+      // When properly logged in, the page URL should look like:
+      // http://localhost:8005/?sessionID=...
+
+      var urlParts = parseUri(document.location.href.toString());
+
+
+
+      // session ID in URL indicating we're logged in?
+      if (urlParts.queryKey && urlParts.queryKey.sessionID) {     //validate if sessionID came back alright
+            console.log("inside if statement")
+
+
+        // **********************************
+        // HINT: this code is related to the `buildReminderElement(..)`
+        // utility further down in this file. Both of them should probably
+        // move to a separate module for the reminder list.
+
+        // pull out reminder element as template for new reminders
+        var $reminder = $("#reminderList > .reminder:first-child");
+        var $reminderTemplate = $reminder.clone();
+        $reminder.remove();
+
+        // HINT: Now, to make a new reminder, you can simply do:
+        //   var $newReminderElem = $reminderTemplate.clone()
+        //
+        // ...and then fill in the appropriate data into its elements
+
+
+        // **********************************
+
+        // TODO: show dashboard
+
+          //$("#loginBox").hide()
+          //$("#dashboard").show()
+          //$("#reminderList").show()
+          //$("#addReminderModel").show()
+          //$("#editReminderModel").show()
+
+        // HINT: dashboard code should go into the `Dashboard` module
+        // from `dashboard.js`
+      }
+      else {
+        // TODO: show login screen
+
+        $("#loginBtn").click(function(e){e.preventDefault(), ServerModule.login({username: $username.val(), password:$userpass.val()})})
+          .then(function(response){
+
+          })
+          .catch(function(response){})
+
+
+
+        // HINT: login screen code should probably be its own module
+        //
+        // ...or you could use prototypes/OLOO to organize the login
+        // functionality.
+
+
+        // **********************************
+
+        // HINT: you can change the URL of the page by assigning:
+        //    document.location.href = "..";
+        //
+        // This action will redirect/refresh the page, re-running
+        // everything, so there's no need to put any code after it.
+      }
+    }
+})()
 
 
 // HINT: this makes sure to fire the `init()` function at DOM-ready.
@@ -26,83 +99,7 @@ $(document).ready(init);
 // ****************************************
 
 
-// HINT: this `init()` function should probably be put into
-// an `App` module.
-window.AppModule = function(){
-	var App = {};
-}
 
-App.init = function() {
-	$message = $("#message");
-	$username = $("#loginUsername") //grabbing the username input811
-	$userpass = $("#loginPassword") //grabbing the password input
-
-	// When properly logged in, the page URL should look like:
-	// http://localhost:8005/?sessionID=...
-
-	var urlParts = parseUri(document.location.href.toString());
-
-
-
-	// session ID in URL indicating we're logged in?
-	if (urlParts.queryKey && urlParts.queryKey.sessionID) { 		//validate if sessionID came back alright
-				console.log("inside if statement")
-
-
-		// **********************************
-		// HINT: this code is related to the `buildReminderElement(..)`
-		// utility further down in this file. Both of them should probably
-		// move to a separate module for the reminder list.
-
-		// pull out reminder element as template for new reminders
-		var $reminder = $("#reminderList > .reminder:first-child");
-		var $reminderTemplate = $reminder.clone();
-		$reminder.remove();
-
-		// HINT: Now, to make a new reminder, you can simply do:
-		//   var $newReminderElem = $reminderTemplate.clone()
-		//
-		// ...and then fill in the appropriate data into its elements
-
-
-
-
-
-		// **********************************
-
-		// TODO: show dashboard
-
-			//$("#loginBox").hide()
-			//$("#dashboard").show()
-			//$("#reminderList").show()
-			//$("#addReminderModel").show()
-			//$("#editReminderModel").show()
-
-		// HINT: dashboard code should go into the `Dashboard` module
-		// from `dashboard.js`
-	}
-	else {
-		// TODO: show login screen
-
-		$("#loginBtn").click(function(e){e.preventDefault(), login({username: $username.val(), password:$userpass.val()})})
-
-
-
-		// HINT: login screen code should probably be its own module
-		//
-		// ...or you could use prototypes/OLOO to organize the login
-		// functionality.
-
-
-		// **********************************
-
-		// HINT: you can change the URL of the page by assigning:
-		//    document.location.href = "..";
-		//
-		// This action will redirect/refresh the page, re-running
-		// everything, so there's no need to put any code after it.
-	}
-}
 
 
 // ****************************************
