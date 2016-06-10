@@ -2,7 +2,7 @@
    as public methods on a `ServerAPI` module.
 */
 
-ServerModule = (function(){
+var ServerModule = (function(){
 
 
 		// login( { username: .., password: .. } )
@@ -12,7 +12,6 @@ ServerModule = (function(){
 		// commented out in the `$.ajax(..)` call below, are done and have
 		// information you need? Will you need callbacks? Promises?
 	console.log("inside login!")
-
 		return new Promise(function(resolve,reject){
 				$.ajax("/api/login",{
 					method: "POST",
@@ -20,13 +19,15 @@ ServerModule = (function(){
 					dataType: "text",
 					cache: false,
 					 success: function onSuccess(newSessionID){
-					 		showMessage("successfull login")
+					 		//AppModule.showMessage("successfull login")
 					 	var sessionID = newSessionID;
 					 				console.log(sessionID)
 					 	resolve(sessionID)
 					 },
 					 error: function onError(jq,statusText,errText){
-					 		reject(statusText) jq.responseText || errText },
+					 		reject(statusText)
+					 		jq.responseText || errText
+					 },
 				});
 		})
 
@@ -34,14 +35,24 @@ ServerModule = (function(){
 
 	// reminders( { sessionID: .. } )
 	function reminders(data) {
-		$.ajax("/api/reminders",{
-			method: "GET",
-			data: data,
-			dataType: "json",
-			cache: false,
-			// success: function onSuccess(resp){},
-			// error: function onError(jq,statusText,errText){ jq.responseText || errText },
-		});
+		return new Promise(function(resolve,reject){
+
+			$.ajax("/api/reminders",{
+				method: "GET",
+				data: data,
+				dataType: "json",
+				cache: false,
+				 success: function onSuccess(resp){
+				 	var object = resp
+				 		resolve(object)
+				 		console.log("response:  ", resp)
+				 		console.log("reminders success")
+				 },
+				 error: function onError(jq,statusText,errText){
+				 	reject(jq.responseText || errText )
+				 	},
+			});
+		})
 	}
 
 	// ignoreReminder( { sessionID: .., reminderID: .. } )
@@ -76,14 +87,22 @@ ServerModule = (function(){
 	//    duration: ..
 	// } )
 	function addReminder(data) {
-		$.ajax("/api/reminder/add",{
-			method: "POST",
-			data: data,
-			dataType: "text",
-			cache: false,
-			// success: function onSuccess(resp){},
-			// error: function onError(jq,statusText,errText){ jq.responseText || errText },
-		});
+		return new Promise(function(resolve,reject){
+
+			$.ajax("/api/reminder/add",{
+				method: "POST",
+				data: data,
+				dataType: "text",
+				cache: false,
+				 success: function onSuccess(resp){
+				 	resolve(resp)
+				 },
+				 error: function onError(jq,statusText,errText){
+				  console.log("error")
+				  reject([jq,statusText,errText])
+				  jq.responseText || errText },
+			});
+		})
 	}
 
 	// addReminder( {
@@ -95,15 +114,20 @@ ServerModule = (function(){
 	//    duration: ..
 	// } )
 	function updateReminder(data) {
-		$.ajax("/api/reminder/update",{
+		return new Promise(function(resolve,reject){
+			$.ajax("/api/reminder/update",{
 			method: "POST",
 			data: data,
 			dataType: "text",
 			cache: false,
-			// success: function onSuccess(resp){},
-			// error: function onError(jq,statusText,errText){ jq.responseText || errText },
-		});
+			 success: function onSuccess(resp){resolve(resp)},
+			 error: function onError(jq,statusText,errText){
+			 	reject(statusText)
+			 	jq.responseText || errText },
+			});
+		})
 	}
+
 
 	// inviteToReminder( { sessionID: .., reminderID: .., invite: .. } )
 	function inviteToReminder(data) {
@@ -118,7 +142,10 @@ ServerModule = (function(){
 	}
 
 	return {
-		login: login
+		login: login,
+		addReminder: addReminder,
+		reminders: reminders,
+		updateReminder: updateReminder
 	}
 
 })();
