@@ -57,26 +57,37 @@ var ServerModule = (function(){
 
 	// ignoreReminder( { sessionID: .., reminderID: .. } )
 	function ignoreReminder(data) {
-		$.ajax("/api/reminder/ignore",{
+		return new Promise(function(resolve,reject){
+			$.ajax("/api/reminder/ignore",{
 			method: "POST",
 			data: data,
 			dataType: "text",
 			cache: false,
-			// success: function onSuccess(resp){},
-			// error: function onError(jq,statusText,errText){ jq.responseText || errText },
-		});
+			success: function onSuccess(resp){
+				resolve(resp)
+			},
+			error: function onError(jq,statusText,errText){ reject(jq.responseText || errText) },
+			});
+		})
+
 	}
 
 	// deleteReminder( { sessionID: .., reminderID: .. } )
 	function deleteReminder(data) {
-		$.ajax("/api/reminder/delete",{
-			method: "POST",
-			data: data,
-			dataType: "text",
-			cache: false,
-			// success: function onSuccess(resp){},
-			// error: function onError(jq,statusText,errText){ jq.responseText || errText },
-		});
+		return new Promise(function(resolve,reject){
+			$.ajax("/api/reminder/delete",{
+				method: "POST",
+				data: data,
+				dataType: "text",
+				cache: false,
+				success: function onSuccess(resp){
+					resolve(resp)
+				},
+				error: function onError(jq,statusText,errText){
+					reject(jq.responseText || errText)
+				}
+			});
+		})
 	}
 
 	// addReminder( {
@@ -99,8 +110,8 @@ var ServerModule = (function(){
 				 },
 				 error: function onError(jq,statusText,errText){
 				  console.log("error")
-				  reject([jq,statusText,errText])
-				  jq.responseText || errText },
+				  reject(jq.responseText || errText )
+				  },
 			});
 		})
 	}
@@ -145,7 +156,9 @@ var ServerModule = (function(){
 		login: login,
 		addReminder: addReminder,
 		reminders: reminders,
-		updateReminder: updateReminder
+		updateReminder: updateReminder,
+		ignoreReminder: ignoreReminder,
+		deleteReminder: deleteReminder
 	}
 
 })();

@@ -18,7 +18,7 @@ body {
 }
 
 header {
-	padding: 10px 40px;
+	padding: 20px 40px;
 	background-color: #eee;
 }
 
@@ -26,12 +26,12 @@ header > h1 {
 	margin: 0px;
 }
 
-#remindersCount{
+/*#remindersCount{
 display: inline;
 }
 #NewReminder{
 	display: inline;
-}
+}*/
 /*#menu{
 	display:none;
 }*/
@@ -39,6 +39,7 @@ display: inline;
 header > nav,
 #message {
 	display: none;
+	float: right;
 }
 
 #message.error {
