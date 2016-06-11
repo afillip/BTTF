@@ -133,8 +133,8 @@ var ServerModule = (function(){
 			cache: false,
 			 success: function onSuccess(resp){resolve(resp)},
 			 error: function onError(jq,statusText,errText){
-			 	reject(statusText)
-			 	jq.responseText || errText },
+			 	reject(jq.responseText || errText )
+			 	},
 			});
 		})
 	}

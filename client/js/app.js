@@ -78,21 +78,22 @@ AppModule = (function(){
 
 })()
 
+///////////////////////////////////////////////// Reminder Module ////////////////////////////////////////////////
 ReminderModule = (function(){
 			var $reminder = $("#reminderList > .reminder:first-child");
       var $reminderTemplate = $reminder.clone();
       $reminder.remove();
-
-                         ///////////////////////////////clicking the new reminder button
+      remindID = $(this).closest('.reminder').data("reminder-id")
+               ///////////////////////////////clicking the new reminder button////////////////////////
 		$("#NewReminder").click(function(e){
 			e.preventDefault()
 			$("#addReminderModal").show()
       console.log("sesh ", sesh)
 			$(".confirm").click(function(e){
 				e.preventDefault()
-				ServerModule.addReminder({sessionID:"sessionID", reminderID:"newid", description:$("#addReminderModal > .description").val(), date:$("#addReminderModal > .date").val(), time:$("#addReminderModal > .time").val(), duration:$("#addReminderModal > .duration").val()})
+				ServerModule.addReminder({sessionID:sesh, reminderID:remindID, description:$("#addReminderModal > .description").val(), date:$("#addReminderModal > .date").val(), time:$("#addReminderModal > .time").val(), duration:$("#addReminderModal > .duration").val()})
 				.then(function(response){
-					console.log(response)
+          $("#addReminderModal").hide()
 				})
 				.catch(function(error){
 					console.log(error)
@@ -105,62 +106,77 @@ ReminderModule = (function(){
 		})
 
 
-     //$("#ReminderCount").text("Reminder Count" + #reminderList.length)
 
-	              /////////////////////////////////////////////////edit current reminder
+
+/////////////////////////////////////////////////edit current reminder///////////////////////////////////////
 		$(document.body).on("click", ".edit", function(e){
 			e.preventDefault(),
 
-			$(this).closest('.reminder')//.css("background-color", "red")
-			$("#editReminderModal").show()                            //////////////////edit window pops up
-      $(document.body).on("click", ".cancel", function(e){                       /////////// cancel edit?
+      remindID = $(this).closest('.reminder').data("reminder-id")
+
+			$("#editReminderModal").show()
+                              //////////////////edit window pops up//////////////////
+     })
+      $(document.body).on("click", ".cancel", function(e){
+                                                              /////////// cancel edit? ///////////
         e.preventDefault(),
       $("#editReminderModal").hide()
       })
-      $(document.body).on("click", ".confirm", function(e){                      //////////// confirm edit?
-        e.preventDefault()
 
-        /*ServerModule.updateReminder({sessionID:"sessionID"})
+      $(document.body).on("click", ".confirm", function(e){
+                                                             //////////// confirm edit? //////////
+        e.preventDefault(),
+        $("#updateReminderModal").show()
+
+        descriptionUp = $("#editReminderModal > .description").val();
+        dateUp = $("#editReminderModal > .date").val();
+         timeUp = $("#editReminderModal > .time").val();
+        durationUp = $("#editReminderModal > .duration").val();
+
+        console.log(descriptionUp)
+        console.log(dateUp)
+        console.log(timeUp)
+        console.log(durationUp)
+
+        ServerModule.updateReminder({sessionID:sesh, reminderID: remindID, description:descriptionUp, date:dateUp, time:timeUp, duration:durationUp})
              .then(function(response){
-                $("#updateReminderModal").show()
-                console.log("inside update reminder window ", $(this))
+                 $("#editReminderModal").hide()
                })
              .catch(function(error){
                 console.log(error)
-              })*/
-      })
-		});
-          ///////////////////////////////////////////////////delete current reminder
+              })
+        })
+
+    //});
+  ///////////////////////////////////////////////////////////delete current reminder////////////////////
 		$(document.body).on("click",".delete",function(e){
 			e.preventDefault(),
 
       remindID = $(this).closest('.reminder').data("reminder-id")
       selection = $(this.closest('.reminder'))
 			deletion = window.confirm("Are you sure you want to delete this reminder?")
-      num = (($("#reminderList").children().length)-1)
+
       if(deletion === true){
         selection.hide()
-        ///$("#ReminderCount").text("You have " + num +  " reminders!")
-        console.log("num", num)
         ServerModule.deleteReminder({sessionID: sesh, reminderID: remindID})
           .then(function(response){
-            console.log("full", $("#reminderList").children().length)
           })
           .catch(function(response){
             console.log("errror")
           })
-          console.log("outerfull", $("#reminderList").children().length)
       }
       else{
-        selection.css("background-color", "blue")
+
       }
 		});
-          //////////////////////////////////////////////ignore current reminder
+ ////////////////////////////////////////////////////////ignore current reminder///////////////////////
      $(document.body).on("click",".ignore", function(e){
+
+      remindID = $(this).closest('.reminder').data("reminder-id")
        e.preventDefault(),
        answer =  window.confirm("Are you sure you want to ignore this reminder?")
        if(answer === true){
-         ServerModule.ignoreReminder({sessionID: "sessionID", reminderID: "reminderID"})
+         ServerModule.ignoreReminder({sessionID: sesh, reminderID: remindID})
            .then(function(response){
              console.log("successfull ignore")
            })
