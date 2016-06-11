@@ -32,6 +32,7 @@ AppModule = (function(){
         			var listItem =	ReminderModule.buildReminderElement(response[i])
         			$("#reminderList").append(listItem)
         		}
+        		$("p > #remindersCount").text("You have" + response.length + "reminders!")
         	})
         	.catch(function(error){
         		console.log(error)
@@ -87,9 +88,20 @@ ReminderModule = (function(){
 			$("#addReminderModal").show()
 			$(".confirm").click(function(e){
 				e.preventDefault()
-				ServerModule.addReminder({sessionID:"d", reminderID:"h", description:"j", date:"d", time:"f", duration:"d"})
+				ServerModule.addReminder({sessionID:"sessionID", reminderID:"newid", description:$("#addReminderModal > .description").val(), date:$("#addReminderModal > .date").val(), time:$("#addReminderModal > .time").val(), duration:$("#addReminderModal > .duration").val()})
+				.then(function(response){
+					console.log(response)
+				})
+				.catch(function(error){
+					console.log(error)
+				})
+			});
+			$(".cancel").click(function(e){
+				e.preventDefault()
+				$("#addReminderModal").hide()
 			})
 		})
+
 
 	//edit current reminder
 		$(document.body).on("click", ".edit", function(e){
